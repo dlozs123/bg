@@ -28,6 +28,11 @@
       background: rgba(0, 0, 0, 0.55);
       color: #fff;
       backdrop-filter: blur(4px);
+      transition: opacity 0.3s ease;
+    }
+    #fullscreen-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
     #fullscreen-btn:hover {
       background: rgba(0, 0, 0, 0.75);
@@ -37,20 +42,40 @@
 <body>
   <button id="fullscreen-btn">全屏</button>  <script>
     const btn = document.getElementById('fullscreen-btn');
+    let hideTimer = null;
+
+    function scheduleHide() {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        btn.classList.add('hidden');
+      }, 2000);
+    }
 
     btn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         btn.textContent = '退出全屏';
+        scheduleHide();
       } else {
         document.exitFullscreen();
         btn.textContent = '全屏';
+        btn.classList.remove('hidden');
       }
     });
 
     document.addEventListener('fullscreenchange', () => {
       if (!document.fullscreenElement) {
         btn.textContent = '全屏';
+        btn.classList.remove('hidden');
+      } else {
+        scheduleHide();
+      }
+    });
+
+    document.addEventListener('mousemove', () => {
+      if (document.fullscreenElement) {
+        btn.classList.remove('hidden');
+        scheduleHide();
       }
     });
   </script></body>
