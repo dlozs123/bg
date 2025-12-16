@@ -16,8 +16,42 @@
       background-position: center center;
       background-repeat: no-repeat;
     }
+    #fullscreen-btn {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      backdrop-filter: blur(4px);
+    }
+    #fullscreen-btn:hover {
+      background: rgba(0, 0, 0, 0.75);
+    }
   </style>
 </head>
 <body>
-</body>
+  <button id="fullscreen-btn">全屏</button>  <script>
+    const btn = document.getElementById('fullscreen-btn');
+
+    btn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        btn.textContent = '退出全屏';
+      } else {
+        document.exitFullscreen();
+        btn.textContent = '全屏';
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        btn.textContent = '全屏';
+      }
+    });
+  </script></body>
 </html>
